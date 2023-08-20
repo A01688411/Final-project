@@ -1,5 +1,6 @@
 
 # Import necessary libraries
+import logging # For save log information
 import os  # For operating system dependent functionalities
 
 import matplotlib.pyplot as plt  # For data visualization
@@ -11,6 +12,13 @@ from sklearn.model_selection import \
     train_test_split  # For splitting the data into training and test datasets
 from sklearn.preprocessing import StandardScaler  # For standardizing features
 
+
+# Configure the logging module
+logging.basicConfig(filename="load_data.log", level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+
+#logger = logging.getLogger('load_data')
 
 # LOADING DATA
 def load_and_examine_data(filepath: str) -> pd.DataFrame:
@@ -24,24 +32,30 @@ def load_and_examine_data(filepath: str) -> pd.DataFrame:
     Returns:
     pd.DataFrame: The loaded DataFrame.
     """
+    logging.info("First few records")
     try:
         # Load the data
         data = pd.read_csv(filepath)
 
         # Print first few records
-        print("First few records:")
-        print(data.head())
-        
+        #print("First few records:")
+        #print(data.head())
+        #logging.info("First few records:",data.head())
+        logging.info("Second few records")
+
         # Print data info
-        print("\nData Information:")
-        data.info()
-        
+        #print("\nData Information:")
+        #data.info()
+        logging.info(f"\nData Information: {data.info()}")
+
         return data
     except FileNotFoundError:
-        print(f"{filepath} does not exist.")
+        #print(f"{filepath} does not exist.")
+        logging.info(f"{filepath} does not exist.")
         return None
     except Exception as e:
-        print(f"An error occurred: {e}")
+        #print(f"An error occurred: {e}")
+        logging.info(f"An error occurred: {e}")
         return None
 
 
