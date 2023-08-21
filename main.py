@@ -5,7 +5,8 @@ preprocessing the data, building the model.
 
 """
 import logging
-#import datetime
+import datetime
+import time
 import numpy as np  # For linear algebra
 
 from load.load_data import (create_cyclic_features, fill_missing_values,
@@ -28,9 +29,17 @@ np.random.seed(0)
 # LOADING DATA
 
 # Configure the logging module
-logging.basicConfig(filename="main.log", level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+#logging.basicConfig(filename='main.log', level=logging.DEBUG,
+#                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+logger = logging.getLogger(__name__) # Indicamos que tome el nombre del modulo
+logger.setLevel(logging.DEBUG) # Configuramos el nivel de logging
+formatter = logging.Formatter('%(asctime)s:%(name)s:%(module)s:%(levelname)s:%(message)s') # Creamos el formato
+file_handler = logging.FileHandler('main.log') # Indicamos el nombre del archivo
+file_handler.setFormatter(formatter) # Configuramos el formato
+logger.addHandler(file_handler) # Agregamos el archivo
+
+
 
 # Utilize the function
 data = load_and_examine_data("./data/weatherAUS.csv")
@@ -42,7 +51,7 @@ plot_count_and_correlation(data, "RainTomorrow", ["#C2C4E2", "#EED4E5"])
 data = create_cyclic_features(data)
 data = fill_missing_values(data)
 visualize_over_years(data)
-logging.info(f"data values data: {data.head(1)}")
+logger.info(f"data values data: {data.head(1)}")
 
 
 # DATA PREPROCESSING
@@ -100,42 +109,42 @@ features = remove_outliers(features, outlier_bounds)
 
 # Assign target variable
 features["RainTomorrow"] = target
-logging.info(f"data values features: {features.head(1)}")
+logger.info(f"data values features: {features.head(1)}")
 
 # MODEL BUILDING
 
 
-#class Main:
-#    """Main function to coordinate the pipeline"""
-#
-#    def __init__(self):
-#        pass
-#
-#    def run(self):
-#        """Execute the pipeline"""
-#        # Load the features data
-#        # features = pd.read_csv("/content/weatherAUS.csv")
-#
-#        # Preprocess the data
-#        preprocessor = Preprocessor()
-#        X_train, X_test, y_train, y_test = preprocessor.transform(features)
-#
-#        # Build the model
-#        model_builder = ModelBuilder()
-#        model = model_builder.build_model(input_dim=X_train.shape[1])
-#
-#        # Train the model
-#        history = model_builder.train_model(model, X_train, y_train)
-#
-#        # Plot loss and accuracy
-#        evaluator = Evaluator()
-#        evaluator.plot_loss(history)
-#        evaluator.plot_accuracy(history)
-#
-#        # Evaluate the model
-#        # evaluator.evaluate_model(model, X_test, y_test)
+class Main:
+    """Main function to coordinate the pipeline"""
+
+    def __init__(self):
+        pass
+
+    def run(self):
+        """Execute the pipeline"""
+        # Load the features data
+        # features = pd.read_csv("/content/weatherAUS.csv")
+
+        # Preprocess the data
+        preprocessor = Preprocessor()
+        X_train, X_test, y_train, y_test = preprocessor.transform(features)
+
+        # Build the model
+        model_builder = ModelBuilder()
+        model = model_builder.build_model(input_dim=X_train.shape[1])
+
+        # Train the model
+        history = model_builder.train_model(model, X_train, y_train)
+
+        # Plot loss and accuracy
+        evaluator = Evaluator()
+        evaluator.plot_loss(history)
+        evaluator.plot_accuracy(history)
+
+        # Evaluate the model
+        # evaluator.evaluate_model(model, X_test, y_test)
 
 
-#if __name__ == "__main__":
-#    main = Main()
-#    main.run()
+if __name__ == "__main__":
+    main = Main()
+    main.run()

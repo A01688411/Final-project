@@ -13,12 +13,19 @@ from sklearn.model_selection import \
 from sklearn.preprocessing import StandardScaler  # For standardizing features
 
 
-# Configure the logging module
-logging.basicConfig(filename="load_data.log", level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+#logger = logging.getLogger(__name__) # Indicamos que tome el nombre del modulo
+#logger.setLevel(logging.INFO) # Configuramos el nivel de logging
+#formatter = logging.Formatter('%(asctime)s:%(name)s:%(module)s:%(levelname)s:%(message)s') # Creamos el formato
+#file_handler = logging.FileHandler('./load/load_data.log') # Indicamos el nombre del archivo
+#file_handler.setFormatter(formatter) # Configuramos el formato
+#logger.addHandler(file_handler) # Agregamos el archivo
 
-#logger = logging.getLogger('load_data')
+# Configure the logging module
+logging.basicConfig(filename='./load/load_data.log', level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+
 
 # LOADING DATA
 def load_and_examine_data(filepath: str) -> pd.DataFrame:
@@ -32,7 +39,6 @@ def load_and_examine_data(filepath: str) -> pd.DataFrame:
     Returns:
     pd.DataFrame: The loaded DataFrame.
     """
-    logging.info("First few records")
     try:
         # Load the data
         data = pd.read_csv(filepath)
@@ -40,8 +46,8 @@ def load_and_examine_data(filepath: str) -> pd.DataFrame:
         # Print first few records
         #print("First few records:")
         #print(data.head())
-        #logging.info("First few records:",data.head())
-        logging.info("Second few records")
+        logging.info("First few records:",data.head(2))
+        #logger.info("Second few records")
 
         # Print data info
         #print("\nData Information:")
@@ -61,7 +67,6 @@ def load_and_examine_data(filepath: str) -> pd.DataFrame:
 
 # DATA VISUALIZATION AND CLEANING
 from typing import List
-
 
 def plot_count_and_correlation(data: pd.DataFrame, target_col: str, color_palette: List[str]) -> None:
     """
