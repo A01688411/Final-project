@@ -1,5 +1,11 @@
 import os
 import sys
+
+from fastapi import FastAPI
+from starlette.responses import JSONResponse
+
+from predictor.predict import ModelPredictor
+from models.models import rainAUS
 #from utilities.logger import CustomLogging
 
 #SAVE LOGS
@@ -11,11 +17,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(parent_dir)
 
-from fastapi import FastAPI
-from starlette.responses import JSONResponse
-
-from predictor.predict import ModelPredictor
-from models.models import rainAUS
 
 app = FastAPI()
 
@@ -25,8 +26,8 @@ async def healthcheck():
     return 'Rain predictor is all ready to go!'
 
 
-@app.post('/predict')
-def predict(rain_aus_features: rainAUS) -> JSONResponse:
+@app.post('/predict_rain')
+def predictor(rain_aus_features: rainAUS) -> JSONResponse:
     predictor = ModelPredictor("ml_models/model.h5")
     X = [rain_aus_features.Cloud3pm,
         rain_aus_features.Cloud9am,
@@ -50,7 +51,7 @@ def predict(rain_aus_features: rainAUS) -> JSONResponse:
         rain_aus_features.month_cos,
         rain_aus_features.month_sin,
         rain_aus_features.year]
-    print([X])
+    #print([X])
     prediction = predictor.predict([X])
     #logger.info("The prediction was created.")
     return JSONResponse(f"Resultado predicción: {prediction}")

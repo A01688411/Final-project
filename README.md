@@ -224,13 +224,165 @@ Follow the next steps to run the test.
     CONTAINER ID   IMAGE           COMMAND                  CREATED              STATUS                          PORTS                    NAMES
     b9e5b770938b   rainaus-image   "uvicorn main:app --…"   About a minute ago   Exited (1) About a minute ago                            rainaus-c
     ```
-#### Checking endpoints for app
+#### Checking endpoints for app 
 
-1. Access `http://127.0.0.1:8000/`, and you will see a message like this `"Titanic classifier is all ready to go!"`
-2. A file called `main_api.log` will be created automatically inside the container. We will inspect it below.
+1. Access `http://127.0.0.1:8000/`, and you will see a message like this `"Rain predictor is all ready to go!"`
+2. A file called `api.log` will be created automatically inside the container. We will inspect it below.
 3. Access `http://127.0.0.1:8000/docs`, the browser will display something like this:
-    ![FastAPI Docs](docs/imgs/fast-api-docs.png)
+    ![FastAPI Docs](docs\img\FastAPI-Docker1.PNG)
 
 4. Try running the following predictions with the endpoint by writing the following values:
+    * **Prediction 1**  
+        Request body
+
+        ```bash
+        {
+        "Cloud3pm": 0.1,
+        "Cloud9am": 1.4,
+        "Evaporation": 0.1,
+        "Humidity3pm": -0.1,
+        "Humidity9am": -1.4,
+        "Location": 0.1,
+        "MaxTemp": -1.5,
+        "MinTemp": -0.0,
+        "Pressure3pm": 0.1,
+        "Pressure9am": -1.2,
+        "Rainfall": -1.4,
+        "Sunshine": -0.2,
+        "Temp3pm": 0.1,
+        "Temp9am": 0.0,
+        "WindGustSpeed": -0.0,
+        "WindSpeed3pm": 0.3,
+        "WindSpeed9am": 0.6,
+        "day_cos": 0.6,
+        "day_sin": 1.4,
+        "month_cos": 0.2,
+        "month_sin": 1.4,
+        "year": -0.0
+        }
+        ```
+
+        Response body 
+        The output will be:
+
+        ```bash
+        "Resultado predicción: [[0.042817]]"
+        ```
+
+        ![Prediction 1](docs\img\Prediction1.PNG)
 
 
+    * **Prediction 2**  
+        Request body
+
+        ```bash
+        {
+        "Cloud3pm": 2.1,
+        "Cloud9am": 1.4,
+        "Evaporation": 2.1,
+        "Humidity3pm": 2.1,
+        "Humidity9am": 1.4,
+        "Location": 2.1,
+        "MaxTemp": 1.5,
+        "MinTemp": 2.0,
+        "Pressure3pm": 2.1,
+        "Pressure9am": 2.2,
+        "Rainfall": 1.4,
+        "Sunshine": 2.2,
+        "Temp3pm": 2.1,
+        "Temp9am": 2.0,
+        "WindGustSpeed": 2.0,
+        "WindSpeed3pm": 2.3,
+        "WindSpeed9am": 1.6,
+        "day_cos": 1.6,
+        "day_sin": 1.4,
+        "month_cos": 2.2,
+        "month_sin": 1.4,
+        "year": 2.0
+        }
+        ```
+
+
+        Response body
+        The output will be:
+
+        ```bash
+        "Resultado predicción: [[0.26570526]]"
+        ```
+
+        ![Prediction 2](docs\img\Prediction2.PNG)
+
+#### Opening the logs
+
+1. Run the command
+
+    ```bash
+    docker exec -it rainaus-c bash
+    ```
+
+    Output:
+
+    ```bash
+    root@6d62d0557345:/#
+    ```
+
+
+2. Check the existing files:
+
+    ```bash
+    ls
+    ```
+
+    Output:
+
+    ```bash
+    __pycache__  boot  dockerfile  home  lib32  libx32   media      mnt     opt        proc              root  sbin  sys  usr
+    bin          dev   etc         lib   lib64  main.py  ml_models  models  predictor  requirements.txt  run   srv   tmp  var
+    ```
+
+3. Open the file `api.log` and inspect the logs with this command:
+
+    ```bash
+    vim api.log
+    ```
+
+    Output:
+    ```bash
+    FALTAAAAAAAAAA
+    ```
+
+4. Copy the logs to the root folder:
+
+    ```bash
+    docker cp rainaus-c:/API/api.log .
+    ```
+
+    Output:
+
+    ```bash
+    Successfully copied 2.05kB to .../itesm-mlops-project/.
+    ```
+
+
+
+
+### Complete deployment of all containers with Docker Compose and usage
+
+#### Create the network
+
+First, create the network AIService by running this command:
+```bash
+docker network create AIservice
+```
+
+#### Run Docker Compose
+
+* Ensure you are in the directory where the docker-compose.yml file is located
+
+* Run the next command to start the App and Frontend APIs
+
+    ```bash
+    docker-compose -f docker-compose.yml up --build
+    ```
+    
+    You will see something like this:
