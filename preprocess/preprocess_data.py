@@ -2,7 +2,11 @@ from typing import Dict, List, Tuple
 
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+from utilities.logger import CustomLogging
 
+#SAVE LOGS
+logger = CustomLogging()
+logger = logger.Create_Logger(file_name="preprocess/preprocess_data.log")
 
 def encode_categorical_features(data: pd.DataFrame, categorical_cols: List[str]) -> pd.DataFrame:
     """
@@ -18,7 +22,11 @@ def encode_categorical_features(data: pd.DataFrame, categorical_cols: List[str])
     label_encoder = LabelEncoder()
     for col in categorical_cols:
         data[col] = label_encoder.fit_transform(data[col])
+    
+    logger.info("Categorical features encoded successfully.")
     return data
+
+    
 
 
 def scale_features(features: pd.DataFrame) -> pd.DataFrame:
@@ -35,7 +43,12 @@ def scale_features(features: pd.DataFrame) -> pd.DataFrame:
     s_scaler = StandardScaler()
     features = s_scaler.fit_transform(features)
     features = pd.DataFrame(features, columns=col_names)
+
+    logger.info("Features scaled successfully with StandardScaler.")
+
     return features
+
+    
 
 
 def remove_outliers(features: pd.DataFrame, bounds: Dict[str, Tuple[float, float]]) -> pd.DataFrame:
@@ -53,3 +66,7 @@ def remove_outliers(features: pd.DataFrame, bounds: Dict[str, Tuple[float, float
         features = features[(features[feature] > lower) &
                             (features[feature] < upper)]
         return features
+    
+    logger.info("Detected and removed outliers successfully.")
+
+

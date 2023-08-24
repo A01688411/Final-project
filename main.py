@@ -5,7 +5,6 @@ preprocessing the data, building the model.
 
 """
 # Import necessary libraries
-import logging
 import datetime
 import time
 import numpy as np  # For linear algebra
@@ -16,30 +15,21 @@ from load.load_data import (create_cyclic_features, fill_missing_values,
 from preprocess.preprocess_data import (encode_categorical_features,
                                         remove_outliers, scale_features)
 from train.train_data import Evaluator, ModelBuilder, Preprocessor
-
+from utilities.logger import CustomLogging
 
 # Prepare a random seed for reproducibility
 np.random.seed(0)
 
 
+logger = CustomLogging()
+logger = logger.Create_Logger(file_name="main.log", streamer=True)
+
+
 # LOADING DATA
-
-# Configure the logging module
-#logging.basicConfig(filename='main.log', level=logging.DEBUG,
-#                    format='%(asctime)s - %(levelname)s - %(message)s')
-
-logger = logging.getLogger(__name__) # Indicamos que tome el nombre del modulo
-logger.setLevel(logging.DEBUG) # Configuramos el nivel de logging
-formatter = logging.Formatter('%(asctime)s:%(name)s:%(module)s:%(levelname)s:%(message)s') # Creamos el formato
-file_handler = logging.FileHandler('main.log') # Indicamos el nombre del archivo
-file_handler.setFormatter(formatter) # Configuramos el formato
-logger.addHandler(file_handler) # Agregamos el archivo
-
-
 
 # Utilize the function
 data = load_and_examine_data("./data/weatherAUS.csv")
-
+logger.info("Data was loaded successfully.")
 
 # Create a mapping dictionary
 mapping = {'Yes': 1, 'No': 0}  # Add more mappings as needed
@@ -56,7 +46,7 @@ plot_count_and_correlation(data, "RainTomorrow", ["#C2C4E2", "#EED4E5"])
 data = create_cyclic_features(data)
 data = fill_missing_values(data)
 visualize_over_years(data)
-logger.info(f"data values data: {data.head(1)}")
+
 
 
 # DATA PREPROCESSING
@@ -105,7 +95,6 @@ features = remove_outliers(features, outlier_bounds)
 
 # Assign target variable
 features["RainTomorrow"] = target
-logger.info(f"data values features: {features.head(1)}")
 
 # MODEL BUILDING
 

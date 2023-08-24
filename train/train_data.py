@@ -9,6 +9,11 @@ from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.models import Sequential, save_model
 from tensorflow.keras.optimizers import Adam
 from sklearn.linear_model import LogisticRegression
+from utilities.logger import CustomLogging
+
+
+logger = CustomLogging()
+logger = logger.Create_Logger(file_name="train/train_data.log")
 
 
 class Preprocessor:
@@ -24,6 +29,7 @@ class Preprocessor:
         y = data["RainTomorrow"]
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42)
+        logger.info("Data was splited successfully.")
         return X_train, X_test, y_train, y_test
 
 
@@ -45,44 +51,26 @@ class ModelBuilder:
         model.add(Dropout(0.5))
         model.add(
             Dense(units=1, kernel_initializer='uniform', activation='sigmoid'))
+        logger.info("Data was created successfully.")
         return model
 
     def train_model(self, model, X_train, y_train):
         """Train the neural network model"""
         early_stopping = callbacks.EarlyStopping(
             min_delta=0.001,
-            patience=20,
+            #patience=20,
             restore_best_weights=True,
         )
         opt = Adam(learning_rate=0.00009)
         model.compile(optimizer=opt, loss='binary_crossentropy',
                       metrics=['accuracy'])
-        history = model.fit(X_train, y_train, batch_size=32, epochs=150, callbacks=[
+        history = model.fit(X_train, y_train, batch_size=32, epochs=10, callbacks=[
                             early_stopping], validation_split=0.2)
 
         save_model(model, './models/model.h5')
+        logger.info("Data was trained successfully.")
 
         return history
-
-#class ModelBuilder:
-#    """Build and train the logistic regression model"""
-#
-#    def __init__(self):
-#        pass
-#
-#    def build_model(self):
-#        """Build the logistic regression model"""
-#        model = LogisticRegression()
-#        return model
-#
-#    def train_model(self, model, X_train, y_train):
-#        """Train the logistic regression model"""
-#        history = model.fit(X_train, y_train)
-#
-#        #save_model(model, './models/model.pkl')
-#
-#        return history
-    
 
 class Evaluator:
     """Evaluate the trained model"""

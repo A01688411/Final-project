@@ -1,6 +1,5 @@
 
 # Import necessary libraries
-import logging # For save log information
 import os  # For operating system dependent functionalities
 
 import matplotlib.pyplot as plt  # For data visualization
@@ -11,20 +10,11 @@ from sklearn import preprocessing  # For preprocessing data
 from sklearn.model_selection import \
     train_test_split  # For splitting the data into training and test datasets
 from sklearn.preprocessing import StandardScaler  # For standardizing features
+from utilities.logger import CustomLogging
 
 
-#logger = logging.getLogger(__name__) # Indicamos que tome el nombre del modulo
-#logger.setLevel(logging.INFO) # Configuramos el nivel de logging
-#formatter = logging.Formatter('%(asctime)s:%(name)s:%(module)s:%(levelname)s:%(message)s') # Creamos el formato
-#file_handler = logging.FileHandler('./load/load_data.log') # Indicamos el nombre del archivo
-#file_handler.setFormatter(formatter) # Configuramos el formato
-#logger.addHandler(file_handler) # Agregamos el archivo
-
-# Configure the logging module
-logging.basicConfig(filename='./load/load_data.log', level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
-
+logger = CustomLogging()
+logger = logger.Create_Logger(file_name="load_data.log")
 
 
 # LOADING DATA
@@ -46,22 +36,22 @@ def load_and_examine_data(filepath: str) -> pd.DataFrame:
         # Print first few records
         #print("First few records:")
         #print(data.head())
-        logging.info("First few records:",data.head(2))
+        logger.info("First few records:")
         #logger.info("Second few records")
 
         # Print data info
         #print("\nData Information:")
         #data.info()
-        logging.info(f"\nData Information: {data.info()}")
+        logger.info(f"\nData Information: {data.info()}")
 
         return data
     except FileNotFoundError:
         #print(f"{filepath} does not exist.")
-        logging.info(f"{filepath} does not exist.")
+        logger.error(f"{filepath} does not exist.")
         return None
     except Exception as e:
         #print(f"An error occurred: {e}")
-        logging.info(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         return None
 
 

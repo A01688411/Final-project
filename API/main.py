@@ -1,6 +1,11 @@
 
 import os
 import sys
+from utilities.logger import CustomLogging
+
+#SAVE LOGS
+logger = CustomLogging()
+logger = logger.Create_Logger(file_name="API/api.log")
 
 # Add the parent directory to sys.path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,7 +22,9 @@ app = FastAPI()
 
 @app.get('/', status_code=200)
 async def healthcheck():
+    logger.info("Rain predictor is all ready to go!")
     return 'Rain predictor is all ready to go!'
+
 
 @app.post('/predict')
 def predict(rain_aus_features: rainAUS) -> JSONResponse:
@@ -46,5 +53,6 @@ def predict(rain_aus_features: rainAUS) -> JSONResponse:
         rain_aus_features.year]
     print([X])
     prediction = predictor.predict([X])
+    logger.info("The prediction was created.")
     return JSONResponse(f"Resultado predicción: {prediction}")
 

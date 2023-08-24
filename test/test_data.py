@@ -1,6 +1,11 @@
 import os
 import pytest
 import pandas as pd
+from utilities.logger import CustomLogging
+
+#SAVE LOGS
+logger = CustomLogging()
+logger = logger.Create_Logger(file_name="test/test_data.log")
 
 def does_csv_file_exist(file_path):
     """
@@ -32,6 +37,8 @@ def test_csv_file_existence():
 
     # Use Pytest's assert statement to check if the file exists
     assert file_exists == False, f"The CSV file at '{csv_file_path}' does not exist."
+    assert file_exists == False, logger.error("The CSV file does not exist.")
+
 
 def test_model_existence():
     """
@@ -52,6 +59,7 @@ def test_model_existence():
     model_path = os.path.join(MODEL_DIRECTORY, model_filename)
     print(model_path)
     assert os.path.exists(model_path), f"Model file '{model_filename}' does not exist."
+    assert os.path.exists(model_path), logger.error("Model file does not exist.")
 
 if __name__ == "__main__":
     # Run the test function using Pytest

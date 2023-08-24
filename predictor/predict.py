@@ -1,5 +1,10 @@
 import argparse
 from keras.models import load_model
+from utilities.logger import CustomLogging
+
+#SAVE LOGS
+logger = CustomLogging()
+logger = logger.Create_Logger(file_name="predictor/predict.log")
 
 class ModelPredictor:
     """
@@ -48,4 +53,5 @@ if __name__ == "__main__":
     new_data = args.new_data
 
     predictions = predictor.predict(new_data)
+    logger.info("prediction was genrated successfully.")
     print(predictions)
