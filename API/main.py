@@ -1,71 +1,50 @@
-import logging
-import requests
-from fastapi import FastAPI, Body
-from tensorflow.keras.models import load_model
 
-#from models.models import model
-model = load_model('./models/model.h5')
+import os
+import sys
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+# Add the parent directory to sys.path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.append(parent_dir)
 
-formatter = logging.Formatter("%(levelname)s: %(asctime)s|%(name)s|%(message)s")
+from fastapi import FastAPI
+from starlette.responses import JSONResponse
 
-file_handler = logging.FileHandler("./API/api.log")
-file_handler.setFormatter(formatter)
-
-stream_handler = logging.StreamHandler()
-stream_handler.setFormatter(formatter)
-
-logger.addHandler(file_handler)
-logger.addHandler(stream_handler)  # Se agrega handler para stream
-
+from predictor.predict import ModelPredictor
+from API.models.models import rainAUS
 
 app = FastAPI()
 
-# ML model prediction function using the prediction API request
-def predict():
+@app.get('/', status_code=200)
+async def healthcheck():
+    return 'Rain predictor is all ready to go!'
 
-    url3 = "http://server.docker:8000/"
-
-    response = requests.request("GET", url3)
-    response = response.text
-
-    return response
-
-
-def predict_rain(input):
-    url3 = "http://server.docker:8000/rain_predict"
-
-    logger.debug("Test text DEBUG")
-    response = requests.post(url3, json=input)
-    response = response.text
-
-    return response
-
-
-@app.get("/")
-def read_root():
-    logger.info("Front-end is all ready to go!")
-    return "Front-end is all ready to go!"
-
-
-@app.post("/classify")
-def classify(payload: dict = Body(...)):
-    logger.debug(f"Incoming input in the front end: {payload}")
-    response = predict_rain(payload)
-    return {"response": response}
-
-
-@app.get("/healthcheck")
-async def v1_healhcheck():
-    url3 = "http://server.docker:8000/"
-
-    response = requests.request("GET", url3)
-    response = response.text
-    logger.info(f"Checking health: {response}")
-
-    return response
-
-
+@app.post('/predict')
+def predict(rain_aus_features: rainAUS) -> JSONResponse:
+    predictor = ModelPredictor("models\model.h5")
+    X = [rain_aus_features.Cloud3pm,
+        rain_aus_features.Cloud9am,
+        rain_aus_features.Evaporation,
+        rain_aus_features.Humidity3pm,
+        rain_aus_features.Humidity9am,
+        rain_aus_features.Location,
+        rain_aus_features.MaxTemp,
+        rain_aus_features.MinTemp,
+        rain_aus_features.Pressure3pm,
+        rain_aus_features.Pressure9am,
+        rain_aus_features.Rainfall,
+        rain_aus_features.Sunshine,
+        rain_aus_features.Temp3pm,
+        rain_aus_features.Temp9am,
+        rain_aus_features.WindGustSpeed,
+        rain_aus_features.WindSpeed3pm,
+        rain_aus_features.WindSpeed9am,
+        rain_aus_features.day_cos,
+        rain_aus_features.day_sin,
+        rain_aus_features.month_cos,
+        rain_aus_features.month_sin,
+        rain_aus_features.year]
+    print([X])
+    prediction = predictor.predict([X])
+    return JSONResponse(f"Resultado predicción: {prediction}")
 

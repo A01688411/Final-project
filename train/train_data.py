@@ -8,6 +8,7 @@ from tensorflow.keras import callbacks
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.models import Sequential, save_model
 from tensorflow.keras.optimizers import Adam
+from sklearn.linear_model import LogisticRegression
 
 
 class Preprocessor:
@@ -63,6 +64,25 @@ class ModelBuilder:
 
         return history
 
+#class ModelBuilder:
+#    """Build and train the logistic regression model"""
+#
+#    def __init__(self):
+#        pass
+#
+#    def build_model(self):
+#        """Build the logistic regression model"""
+#        model = LogisticRegression()
+#        return model
+#
+#    def train_model(self, model, X_train, y_train):
+#        """Train the logistic regression model"""
+#        history = model.fit(X_train, y_train)
+#
+#        #save_model(model, './models/model.pkl')
+#
+#        return history
+    
 
 class Evaluator:
     """Evaluate the trained model"""

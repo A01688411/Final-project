@@ -98,4 +98,14 @@ Follow the next steps to run the test.
     ================================================================================================= 1 passed in 0.76s ==================================================================================================
     ```
 
+## Usage
+
+### Individual Fastapi and Use Deployment
+
+* Run the next command to start the RainAUS API locally
+
+    ```bash
+    uvicorn API.main:app --reload
+    ```
+
 

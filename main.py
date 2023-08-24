@@ -4,6 +4,7 @@ The process includes loading data, visualizing the data, cleaning the data,
 preprocessing the data, building the model.
 
 """
+# Import necessary libraries
 import logging
 import datetime
 import time
@@ -16,11 +17,6 @@ from preprocess.preprocess_data import (encode_categorical_features,
                                         remove_outliers, scale_features)
 from train.train_data import Evaluator, ModelBuilder, Preprocessor
 
-# Import necessary libraries
-
-
-# from typing import List, Dict, Tuple
-# from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 # Prepare a random seed for reproducibility
 np.random.seed(0)
@@ -45,8 +41,17 @@ logger.addHandler(file_handler) # Agregamos el archivo
 data = load_and_examine_data("./data/weatherAUS.csv")
 
 
-# DATA VISUALIZATION AND CLEANING
+# Create a mapping dictionary
+mapping = {'Yes': 1, 'No': 0}  # Add more mappings as needed
+# Use the map() function to convert the string field to 0 and 1
+data["RainTomorrow2"] = data['RainTomorrow'].map(mapping)
 
+target = data["RainTomorrow2"].fillna(0)
+#target = data["RainTomorrow"]
+
+
+
+# DATA VISUALIZATION AND CLEANING
 plot_count_and_correlation(data, "RainTomorrow", ["#C2C4E2", "#EED4E5"])
 data = create_cyclic_features(data)
 data = fill_missing_values(data)
@@ -55,7 +60,6 @@ logger.info(f"data values data: {data.head(1)}")
 
 
 # DATA PREPROCESSING
-
 # Apply categorical feature encoding
 categorical_cols = [col for col in data.columns if data[col].dtype == 'object']
 data = encode_categorical_features(data, categorical_cols)
@@ -64,6 +68,7 @@ data = encode_categorical_features(data, categorical_cols)
 features_cols = data.columns.difference(
     [
         'RainTomorrow',
+        'RainTomorrow2',
         'Date',
         'day',
         'month',
@@ -72,15 +77,6 @@ features_cols = data.columns.difference(
         'WindGustDir',
         'RainToday'])
 features = data[features_cols]
-
-# Create a mapping dictionary
-mapping = {'SI': 1, 'NO': 0}  # Add more mappings as needed
-# Use the map() function to convert the string field to 0 and 1
-data["RainTomorrow2"] = data['RainTomorrow'].map(mapping)
-
-target = data["RainTomorrow2"]
-# target = data["RainTomorrow"]
-
 
 # Scale features
 features = scale_features(features)
@@ -113,7 +109,6 @@ logger.info(f"data values features: {features.head(1)}")
 
 # MODEL BUILDING
 
-
 class Main:
     """Main function to coordinate the pipeline"""
 
@@ -134,15 +129,15 @@ class Main:
         model = model_builder.build_model(input_dim=X_train.shape[1])
 
         # Train the model
-        history = model_builder.train_model(model, X_train, y_train)
+        history = model_builder.train_model(model, X_train,  y_train)
 
         # Plot loss and accuracy
         evaluator = Evaluator()
         evaluator.plot_loss(history)
         evaluator.plot_accuracy(history)
 
-        # Evaluate the model
-        # evaluator.evaluate_model(model, X_test, y_test)
+        #Evaluate the model
+        evaluator.evaluate_model(model, X_test, y_test)
 
 
 if __name__ == "__main__":
