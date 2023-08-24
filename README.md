@@ -186,3 +186,51 @@ Follow the next steps to run the test.
         ```bash
         "Resultado predicción: [[0.73788786]]"
         ```
+### Individual deployment of the API with Docker and usage
+
+#### Build the image
+
+* Ensure you are in the `Final-project/` directory (root folder).
+* Run the following code to build the image:
+    ```bash
+    docker build -t rainaus-image ./app/
+    ```
+
+* Inspect the image created by running this command:
+
+    ```bash
+    docker images
+    ```
+    Output:
+    ```bash
+    REPOSITORY      TAG       IMAGE ID       CREATED         SIZE
+    rainaus-image   latest    a738560a549e   2 minutes ago   495MB
+    ```
+
+#### Run Titanic REST API
+
+1. Run the next command to start the `rainaus-image` image in a container.
+    ```bash
+    docker run -d --name rainaus-c -p 8000:8000 rainaus-image
+    ```
+2. Check the container running.
+
+    ```bash
+    docker ps -a
+    ```
+    Output:
+
+    ```bash
+    CONTAINER ID   IMAGE           COMMAND                  CREATED              STATUS                          PORTS                    NAMES
+    b9e5b770938b   rainaus-image   "uvicorn main:app --…"   About a minute ago   Exited (1) About a minute ago                            rainaus-c
+    ```
+#### Checking endpoints for app
+
+1. Access `http://127.0.0.1:8000/`, and you will see a message like this `"Titanic classifier is all ready to go!"`
+2. A file called `main_api.log` will be created automatically inside the container. We will inspect it below.
+3. Access `http://127.0.0.1:8000/docs`, the browser will display something like this:
+    ![FastAPI Docs](docs/imgs/fast-api-docs.png)
+
+4. Try running the following predictions with the endpoint by writing the following values:
+
+

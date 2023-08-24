@@ -14,7 +14,7 @@ from utilities.logger import CustomLogging
 
 
 logger = CustomLogging()
-logger = logger.Create_Logger(file_name="load_data.log")
+logger = logger.Create_Logger(file_name="load/load_data.log")
 
 
 # LOADING DATA
