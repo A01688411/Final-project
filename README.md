@@ -386,3 +386,113 @@ docker network create AIservice
     ```
     
     You will see something like this:
+
+    ```bash
+    Attaching to final-project-frontend-1, final-project-server-1
+    final-project-server-1    | INFO:     Will watch for changes in these directories: ['/']
+    final-project-server-1    | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+    final-project-server-1    | INFO:     Started reloader process [1] using StatReload
+    final-project-frontend-1  | INFO:     Will watch for changes in these directories: ['/']
+    final-project-frontend-1  | INFO:     Uvicorn running on http://0.0.0.0:3000 (Press CTRL+C to quit)
+    final-project-frontend-1  | INFO:     Started reloader process [1] using StatReload
+    final-project-server-1    | 2023-08-24 22:56:39.005216: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+    final-project-server-1    | 2023-08-24 22:56:39.007943: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+    final-project-frontend-1  | INFO:     Started server process [8]
+    final-project-frontend-1  | INFO:     Waiting for application startup.
+    final-project-frontend-1  | INFO:     Application startup complete.
+    final-project-server-1    | 2023-08-24 22:56:39.062987: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+    final-project-server-1    | 2023-08-24 22:56:39.063406: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+    final-project-server-1    | To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+    final-project-server-1    | 2023-08-24 22:56:40.276517: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+    final-project-server-1    | INFO:     Started server process [8]
+    final-project-server-1    | INFO:     Waiting for application startup.
+    final-project-server-1    | INFO:     Application startup complete.
+    ```
+
+#### Checking endpoints in Frontend
+1. Access `http://127.0.0.1:3000/`, and you will see a message like this `"Front-end is all ready to go!"`
+2. A file called `frontend.log` will be created automatically inside the container. We will inspect it below.
+3. Access `http://127.0.0.1:3000/docs`, the browser will display something like this:
+    ![Frontend Docs](docs\img\Frontend-1.PNG)
+
+4. Try running the following predictions with the endpoint `classify` by writing the following values:
+    * **Prediction 1**  
+        Request body
+
+        ```bash
+        {
+        "Cloud3pm": 0.1,
+        "Cloud9am": 1.4,
+        "Evaporation": 0.1,
+        "Humidity3pm": -0.1,
+        "Humidity9am": -1.4,
+        "Location": 0.1,
+        "MaxTemp": -1.5,
+        "MinTemp": -0.0,
+        "Pressure3pm": 0.1,
+        "Pressure9am": -1.2,
+        "Rainfall": -1.4,
+        "Sunshine": -0.2,
+        "Temp3pm": 0.1,
+        "Temp9am": 0.0,
+        "WindGustSpeed": -0.0,
+        "WindSpeed3pm": 0.3,
+        "WindSpeed9am": 0.6,
+        "day_cos": 0.6,
+        "day_sin": 1.4,
+        "month_cos": 0.2,
+        "month_sin": 1.4,
+        "year": -0.0
+        }
+        ```
+        Response body
+        The output will be:
+
+        ```bash
+        "response": "\"Resultado predicción: [[0.042817]]\""
+        ```
+        ![Frontend Prediction 1](docs\img\Frontend-prediction-1.PNG)
+
+    * **Prediction 2**  
+        Request body
+
+        ```bash
+        {
+        "Cloud3pm": 2.1,
+        "Cloud9am": 1.4,
+        "Evaporation": 2.1,
+        "Humidity3pm": 2.1,
+        "Humidity9am": 1.4,
+        "Location": 2.1,
+        "MaxTemp": 1.5,
+        "MinTemp": 2.0,
+        "Pressure3pm": 2.1,
+        "Pressure9am": 2.2,
+        "Rainfall": 1.4,
+        "Sunshine": 2.2,
+        "Temp3pm": 2.1,
+        "Temp9am": 2.0,
+        "WindGustSpeed": 2.0,
+        "WindSpeed3pm": 2.3,
+        "WindSpeed9am": 1.6,
+        "day_cos": 1.6,
+        "day_sin": 1.4,
+        "month_cos": 2.2,
+        "month_sin": 1.4,
+        "year": 2.0
+        }
+        ```
+        Response body
+        The output will be:
+
+        ```bash
+        "response": "\"Resultado predicción: [[0.26570526]]\""
+        ```
+
+        ![Frontend Prediction 2](docs\img\Frontend-prediction-2.PNG)
+
+
+
+
+
+        
