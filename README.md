@@ -108,4 +108,81 @@ Follow the next steps to run the test.
     uvicorn API.main:app --reload
     ```
 
+#### Checking endpoints
 
+1. Access `http://127.0.0.1:8000/`, you will see a message like this `"Rain predictor is all ready to go!"`
+2. Access `http://127.0.0.1:8000/docs`, the browser will display something like this:
+![FastAPI Docs](docs\img\FastAPI.PNG)
+3. Try running the following predictions with the endpoint by writing the following values:
+    * **Prediction 1**  
+        Request body
+
+        ```bash
+        {
+        "Cloud3pm": 0.1,
+        "Cloud9am": 1.4,
+        "Evaporation": 0.1,
+        "Humidity3pm": -0.1,
+        "Humidity9am": -1.4,
+        "Location": 0.1,
+        "MaxTemp": -1.5,
+        "MinTemp": -0.0,
+        "Pressure3pm": 0.1,
+        "Pressure9am": -1.2,
+        "Rainfall": -1.4,
+        "Sunshine": -0.2,
+        "Temp3pm": 0.1,
+        "Temp9am": 0.0,
+        "WindGustSpeed": -0.0,
+        "WindSpeed3pm": 0.3,
+        "WindSpeed9am": 0.6,
+        "day_cos": 0.6,
+        "day_sin": 1.4,
+        "month_cos": 0.2,
+        "month_sin": 1.4,
+        "year": -0.0
+        }
+        ```
+
+        Response body         
+        The output will be:
+        ```bash
+        "Resultado predicción: [[0.00278837]]"
+        ```
+
+
+    * **Prediction 2**  
+        Request body
+
+        ```bash
+        {
+        "Cloud3pm": 0.1,
+        "Cloud9am": 1.4,
+        "Evaporation": 0.1,
+        "Humidity3pm": -0.1,
+        "Humidity9am": -1.4,
+        "Location": 0.1,
+        "MaxTemp": -1.5,
+        "MinTemp": -0.0,
+        "Pressure3pm": 0.1,
+        "Pressure9am": -1.2,
+        "Rainfall": -1.4,
+        "Sunshine": -0.2,
+        "Temp3pm": 0.1,
+        "Temp9am": 0.0,
+        "WindGustSpeed": -0.0,
+        "WindSpeed3pm": 0.3,
+        "WindSpeed9am": 0.6,
+        "day_cos": 0.6,
+        "day_sin": 1.4,
+        "month_cos": 0.2,
+        "month_sin": 1.4,
+        "year": -0.0
+        }
+        ```
+
+        Response body         
+        The output will be:
+        ```bash
+        "Resultado predicción: [[0.73788786]]"
+        ```
