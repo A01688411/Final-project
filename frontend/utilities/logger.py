@@ -1,19 +1,31 @@
 import logging
 
-class CustomLogging():
+class CustomLogging:
+    """
+    Custom logging class to create a logger with specified configurations.
+    """
 
-    def Create_Logger(self, file_name: str, streamer: bool = False) -> logging:
+    def create_logger(self, file_name: str, streamer: bool = False) -> logging:
+        """
+        Creates a logger with the specified configurations.
 
-        logger = logging.getLogger(__name__)  # Indicamos que tome el nombre del modulo
-        logger.setLevel(logging.DEBUG)  # Configuramos el nivel de logging
+        Args:
+            file_name (str): The name of the log file.
+            streamer (bool, optional): Whether to enable streaming logs to the console. Defaults to False.
 
-        formatter = logging.Formatter('%(asctime)s:%(name)s:%(module)s:%(levelname)s:%(message)s')  # Creamos el formato
+        Returns:
+            logging: The created logger instance.
+        """
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.DEBUG)
+
+        formatter = logging.Formatter('%(asctime)s:%(name)s:%(module)s:%(levelname)s:%(message)s')
 
         file_handler = logging.FileHandler(file_name)
-        file_handler.setFormatter(formatter)  # Configuramos el formato
-        logger.addHandler(file_handler)  # Agregamos el archivo
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
 
-        if (streamer):
+        if streamer:
             stream_handler = logging.StreamHandler()
             stream_handler.setFormatter(formatter)
             logger.addHandler(stream_handler)

@@ -64,7 +64,7 @@ class ModelBuilder:
         opt = Adam(learning_rate=0.00009)
         model.compile(optimizer=opt, loss='binary_crossentropy',
                       metrics=['accuracy'])
-        history = model.fit(X_train, y_train, batch_size=32, epochs=10, callbacks=[
+        history = model.fit(X_train, y_train, batch_size=32, epochs=150, callbacks=[
                             early_stopping], validation_split=0.2)
 
         save_model(model, './models/model.h5')
