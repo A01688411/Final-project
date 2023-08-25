@@ -6,11 +6,11 @@ from starlette.responses import JSONResponse
 
 from predictor.predict import ModelPredictor
 from models.models import rainAUS
-#from utilities.logger import CustomLogging
+from utilities.logger import CustomLogging
 
 #SAVE LOGS
-#logger = CustomLogging()
-#logger = logger.Create_Logger(file_name="app/app.log")
+logger = CustomLogging()
+logger = logger.Create_Logger(file_name="main.log")
 
 # Add the parent directory to sys.path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +22,7 @@ app = FastAPI()
 
 @app.get('/', status_code=200)
 async def healthcheck():
-    #logger.info("Rain predictor is all ready to go!")
+    logger.info("Rain predictor is all ready to go!")
     return 'Rain predictor is all ready to go!'
 
 
@@ -53,5 +53,5 @@ def predictor(rain_aus_features: rainAUS) -> JSONResponse:
         rain_aus_features.year]
     #print([X])
     prediction = predictor.predict([X])
-    #logger.info("The prediction was created.")
+    logger.debug("The prediction was created.")
     return JSONResponse(f"Resultado predicción: {prediction}")

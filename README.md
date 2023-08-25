@@ -491,8 +491,3 @@ docker network create AIservice
 
         ![Frontend Prediction 2](docs\img\Frontend-prediction-2.PNG)
 
-
-
-
-
-        
